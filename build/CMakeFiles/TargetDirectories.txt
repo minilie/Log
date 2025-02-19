@@ -1,0 +1,7 @@
+/home/minilie/Log/build/CMakeFiles/intrinsics_gen.dir
+/home/minilie/Log/build/CMakeFiles/omp_gen.dir
+/home/minilie/Log/build/CMakeFiles/acc_gen.dir
+/home/minilie/Log/build/CMakeFiles/clang-tablegen-targets.dir
+/home/minilie/Log/build/CMakeFiles/function-analyzer.dir
+/home/minilie/Log/build/CMakeFiles/edit_cache.dir
+/home/minilie/Log/build/CMakeFiles/rebuild_cache.dir

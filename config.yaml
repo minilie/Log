@@ -1,0 +1,4 @@
+project_root: "OH5"    # 项目根目录名
+component_level: 3     # 组件所在的目录层级
+batch_size: 50
+filter_operator_calls: false

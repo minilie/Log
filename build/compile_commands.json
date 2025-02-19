@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/minilie/Log/build",
+  "command": "/usr/lib/llvm-14/bin/clang++  -I/usr/lib/llvm-14/include   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -o CMakeFiles/function-analyzer.dir/function-analyzer.cpp.o -c /home/minilie/Log/function-analyzer.cpp",
+  "file": "/home/minilie/Log/function-analyzer.cpp"
+}
+]
