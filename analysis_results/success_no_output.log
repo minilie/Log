@@ -30,7 +30,6 @@
 /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/src/core/modules/sample_module.cpp
 /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/src/core/resource/video_muted_image_res.cpp
 /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/src/core/resource/video_play_image_res.cpp
-/home/minilie/ohos/OH5/out/riscv32_virt/qemu_riscv_mini_system_demo/obj/foundation/arkui/ace_engine_lite/frameworks/syscap_module_native_mini.cpp
 /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/common/log/ace_log.cpp
 /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/common/memory/mem_proc.cpp
 /home/minilie/ohos/OH5/foundation/arkui/ui_lite/frameworks/common/image_decode_ability.cpp

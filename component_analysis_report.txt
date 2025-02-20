@@ -102,7 +102,7 @@ Component Analysis Report
      * Number of defined functions: 12
      * Number of external calls: 12
    - qemu_riscv_mini_system_demo:
-     * Number of defined functions: 1748
+     * Number of defined functions: 1749
      * Number of external calls: 1748
    - resource_management_lite:
      * Number of defined functions: 26
@@ -11848,56 +11848,56 @@ Component Analysis Report
        caller range: 196-209
        callee range: 149-149
      * ArchStartSchedule calls ArchIntLock
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 123
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 133
        to /home/minilie/ohos/OH5/base/hiviewdfx/hiview_lite/../../../kernel/liteos_m/arch/include/los_interrupt.h
-       caller range: 122-127
+       caller range: 132-142
        callee range: 147-147
      * ArchSysExit calls ArchIntLock
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 77
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 87
        to /home/minilie/ohos/OH5/base/hiviewdfx/hiview_lite/../../../kernel/liteos_m/arch/include/los_interrupt.h
-       caller range: 76-80
+       caller range: 86-90
        callee range: 147-147
      * ArchTaskSchedule calls ArchIntLock
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 63
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 68
        to /home/minilie/ohos/OH5/base/hiviewdfx/hiview_lite/../../../kernel/liteos_m/arch/include/los_interrupt.h
-       caller range: 55-73
+       caller range: 60-83
        callee range: 147-147
      * ArchTaskSchedule calls ArchIntRestore
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 71
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 81
        to /home/minilie/ohos/OH5/base/hiviewdfx/hiview_lite/../../../kernel/liteos_m/arch/include/los_interrupt.h
-       caller range: 55-73
+       caller range: 60-83
        callee range: 149-149
 
    arch -> kernel:
      * ArchStartSchedule calls OsSchedStart
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 124
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 139
        to /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_sched.c
-       caller range: 122-127
+       caller range: 132-142
        callee range: 494-519
      * ArchTaskSchedule calls OsSchedTaskSwitch
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 65
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 75
        to /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_sched.c
-       caller range: 55-73
+       caller range: 60-83
        callee range: 522-566
      * ExcInfoDisplay calls LOS_TaskIsRunning
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 281
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 286
        to /home/minilie/ohos/OH5/kernel/liteos_m/kernel/include/los_task.h
-       caller range: 272-289
+       caller range: 272-294
        callee range: 1108-1108
      * HalExcEntry calls LOS_TaskIsRunning
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 324
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 334
        to /home/minilie/ohos/OH5/kernel/liteos_m/kernel/include/los_task.h
-       caller range: 304-333
+       caller range: 309-348
        callee range: 1108-1108
      * HalExcEntry calls OsGetAllTskInfo
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 326
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 341
        to /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_task.c
-       caller range: 304-333
+       caller range: 309-348
        callee range: 359-412
      * HalIrqEndCheckNeedSched calls LOS_Schedule
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 50
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 55
        to /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_sched.c
-       caller range: 48-52
+       caller range: 48-57
        callee range: 620-624
 
    arch -> riscv32_virt:
@@ -11906,6 +11906,16 @@ Component Analysis Report
        to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/riscv_hal.c
        caller range: 153-186
        callee range: 46-48
+     * ArchStartSchedule calls printf
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 137
+       to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
+       caller range: 132-142
+       callee range: 55-68
+     * ArchTaskSchedule calls printf
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 73
+       to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
+       caller range: 60-83
+       callee range: 55-68
      * ExcBackTrace calls printf
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 218
        to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
@@ -11914,7 +11924,7 @@ Component Analysis Report
      * ExcInfoDisplay calls printf
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 273
        to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
-       caller range: 272-289
+       caller range: 272-294
        callee range: 55-68
      * ExcInfoDisplayContext calls printf
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 232
@@ -11922,19 +11932,24 @@ Component Analysis Report
        caller range: 229-269
        callee range: 55-68
      * HalExcEntry calls printf
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 309
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 314
        to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
-       caller range: 304-333
+       caller range: 309-348
        callee range: 55-68
      * HalHwiDefaultHandler calls printf
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/common/los_common_interrupt.c line 44
        to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
        caller range: 42-47
        callee range: 55-68
-     * HalUnalignedAccessFix calls printf
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 299
+     * HalIrqEndCheckNeedSched calls printf
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c line 53
        to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
-       caller range: 292-301
+       caller range: 48-57
+       callee range: 55-68
+     * HalUnalignedAccessFix calls printf
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 304
+       to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
+       caller range: 297-306
        callee range: 55-68
      * SysTickLock calls HalIrqDisable
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_timer.c line 116
@@ -11971,7 +11986,7 @@ Component Analysis Report
      * ExcInfoDisplay calls OsLogLevelCheck
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 273
        to /home/minilie/ohos/OH5/kernel/liteos_m/utils/los_debug.c
-       caller range: 272-289
+       caller range: 272-294
        callee range: 88-98
      * ExcInfoDisplayContext calls OsLogLevelCheck
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 232
@@ -11979,14 +11994,14 @@ Component Analysis Report
        caller range: 229-269
        callee range: 88-98
      * HalExcEntry calls OsDoExcHook
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 330
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 345
        to /home/minilie/ohos/OH5/kernel/liteos_m/utils/los_debug.c
-       caller range: 304-333
+       caller range: 309-348
        callee range: 78-84
      * HalExcEntry calls OsLogLevelCheck
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 309
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 314
        to /home/minilie/ohos/OH5/kernel/liteos_m/utils/los_debug.c
-       caller range: 304-333
+       caller range: 309-348
        callee range: 88-98
      * HalHwiDefaultHandler calls OsLogLevelCheck
        from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/common/los_common_interrupt.c line 44
@@ -11994,9 +12009,9 @@ Component Analysis Report
        caller range: 42-47
        callee range: 88-98
      * HalUnalignedAccessFix calls OsLogLevelCheck
-       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 299
+       from /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_interrupt.c line 304
        to /home/minilie/ohos/OH5/kernel/liteos_m/utils/los_debug.c
-       caller range: 292-301
+       caller range: 297-306
        callee range: 88-98
 
    bootstrap_lite -> init:
@@ -27123,24 +27138,24 @@ Component Analysis Report
        caller range: 88-95
        callee range: 103-111
      * NativeapiDeviceInfo::GetLanguage calls JSI::SetStringProperty
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 102
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 108
        to /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/native_engine/jsi/jsi.cpp
-       caller range: 98-107
+       caller range: 98-113
        callee range: 103-111
      * NativeapiDeviceInfo::GetProductInfo calls JSI::SetNumberProperty
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 133
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 139
        to /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/native_engine/jsi/jsi.cpp
-       caller range: 110-141
+       caller range: 116-147
        callee range: 81-89
      * NativeapiDeviceInfo::GetProductInfo calls JSI::SetStringProperty
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 118
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 124
        to /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/native_engine/jsi/jsi.cpp
-       caller range: 110-141
+       caller range: 116-147
        callee range: 103-111
      * NativeapiDeviceInfo::GetRegion calls JSI::SetStringProperty
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 148
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 160
        to /home/minilie/ohos/OH5/foundation/arkui/ace_engine_lite/frameworks/native_engine/jsi/jsi.cpp
-       caller range: 144-153
+       caller range: 150-165
        callee range: 103-111
      * NativeapiKv::Clear calls JSI::AcquireValue
        from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/kvstorekit/src/nativeapi_kv.cpp line 285
@@ -27681,19 +27696,19 @@ Component Analysis Report
        caller range: 88-95
        callee range: 109-116
      * NativeapiDeviceInfo::GetProductInfo calls GetBrand
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 112
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 118
        to /home/minilie/ohos/OH5/base/startup/init/interfaces/innerkits/syspara/parameter.c
-       caller range: 110-141
+       caller range: 116-147
        callee range: 129-132
      * NativeapiDeviceInfo::GetProductInfo calls GetManufacture
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 113
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 119
        to /home/minilie/ohos/OH5/base/startup/init/interfaces/innerkits/syspara/parameter.c
-       caller range: 110-141
+       caller range: 116-147
        callee range: 124-126
      * NativeapiDeviceInfo::GetProductInfo calls GetProductModel
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 114
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 120
        to /home/minilie/ohos/OH5/base/startup/init/interfaces/innerkits/syspara/parameter.c
-       caller range: 110-141
+       caller range: 116-147
        callee range: 119-121
      * ReadFileImpl calls GetRealPath
        from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/filekit/src/nativeapi_fs_impl.c line 335
@@ -27997,15 +28012,27 @@ Component Analysis Report
 
    js -> resource_management_lite:
      * NativeapiDeviceInfo::GetLanguage calls GLOBAL_GetLanguage
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 101
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 107
        to /home/minilie/ohos/OH5/base/global/resource_management_lite/frameworks/resmgr_lite/src/global.c
-       caller range: 98-107
+       caller range: 98-113
        callee range: 56-74
      * NativeapiDeviceInfo::GetRegion calls GLOBAL_GetRegion
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 147
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 159
        to /home/minilie/ohos/OH5/base/global/resource_management_lite/frameworks/resmgr_lite/src/global.c
-       caller range: 144-153
+       caller range: 150-165
        callee range: 110-128
+
+   js -> riscv32_virt:
+     * NativeapiDeviceInfo::GetLanguage calls printf
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 104
+       to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
+       caller range: 98-113
+       callee range: 55-68
+     * NativeapiDeviceInfo::GetRegion calls printf
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 155
+       to /home/minilie/ohos/OH5/device/qemu/riscv32_virt/liteos_m/board/libc/dprintf.c
+       caller range: 150-165
+       callee range: 55-68
 
    js -> src:
      * ClearKVStore calls memset_s
@@ -28096,19 +28123,19 @@ Component Analysis Report
 
    js -> ui_lite:
      * NativeapiDeviceInfo::GetProductInfo calls Screen::GetHeight
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 134
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 140
        to /home/minilie/ohos/OH5/foundation/arkui/ui_lite/frameworks/common/screen.cpp
-       caller range: 110-141
+       caller range: 116-147
        callee range: 36-38
      * NativeapiDeviceInfo::GetProductInfo calls Screen::GetInstance
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 132
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 138
        to /home/minilie/ohos/OH5/foundation/arkui/ui_lite/interfaces/kits/common/screen.h
-       caller range: 110-141
+       caller range: 116-147
        callee range: 54-54
      * NativeapiDeviceInfo::GetProductInfo calls Screen::GetWidth
-       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 133
+       from /home/minilie/ohos/OH5/commonlibrary/utils_lite/js/builtin/deviceinfokit/src/nativeapi_deviceinfo.cpp line 139
        to /home/minilie/ohos/OH5/foundation/arkui/ui_lite/frameworks/common/screen.cpp
-       caller range: 110-141
+       caller range: 116-147
        callee range: 31-33
 
    kal -> arch:
@@ -29780,27 +29807,27 @@ Component Analysis Report
        from /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_init.c line 121
        to /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c
        caller range: 112-122
-       callee range: 76-80
+       callee range: 86-90
      * LOS_Reboot calls ArchSysExit
        from /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_init.c line 108
        to /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c
        caller range: 106-109
-       callee range: 76-80
+       callee range: 86-90
      * LOS_SchedTickHandler calls ArchTaskSchedule
        from /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_sched.c line 611
        to /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c
        caller range: 589-617
-       callee range: 55-73
+       callee range: 60-83
      * LOS_Schedule calls ArchTaskSchedule
        from /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_sched.c line 622
        to /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c
        caller range: 620-624
-       callee range: 55-73
+       callee range: 60-83
      * LOS_Start calls ArchStartSchedule
        from /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_init.c line 126
        to /home/minilie/ohos/OH5/kernel/liteos_m/arch/risc-v/riscv32/gcc/los_context.c
        caller range: 125-127
-       callee range: 122-127
+       callee range: 132-142
      * LOS_TaskDelay calls ArchIsIntActive
        from /home/minilie/ohos/OH5/kernel/liteos_m/kernel/src/los_task.c line 1190
        to /home/minilie/ohos/OH5/kernel/liteos_m/arch/include/los_interrupt.h
@@ -37042,6 +37069,13 @@ Component Analysis Report
        to /home/minilie/ohos/OH5/kernel/liteos_m/kal/cmsis/cmsis_liteos2.c
        caller range: 58-60
        callee range: 615-629
+
+   samgr_lite -> qemu_riscv_mini_system_demo:
+     * HasSystemCapability calls GetSysCapNum
+       from /home/minilie/ohos/OH5/out/riscv32_virt/qemu_riscv_mini_system_demo/obj/foundation/arkui/ace_engine_lite/frameworks/syscap_module_native_mini.cpp line 45
+       to /home/minilie/ohos/OH5/out/riscv32_virt/qemu_riscv_mini_system_demo/obj/foundation/arkui/ace_engine_lite/frameworks/syscap_module_native_mini.cpp
+       caller range: 31-56
+       callee range: 39-41
 
    samgr_lite -> src:
      * HasSystemCapability calls snprintf_s
@@ -49126,7 +49160,7 @@ Component Analysis Report
        caller range: 2149-2149
      * Abort calls numeric_limits::max
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 2176
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/limits
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/limits
        caller range: 2149-2149
      * AddGlobalTestEnvironment calls UnitTest::AddEnvironment
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 1335
@@ -49225,23 +49259,23 @@ Component Analysis Report
        callee range: 188-188
      * AssertionResult::AppendMessage calls basic_string::append
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 208
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 206-209
      * AssertionResult::AppendMessage calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 208
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 206-209
      * AssertionResult::AppendMessage calls unique_ptr::get
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 207
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 206-209
      * AssertionResult::AppendMessage calls unique_ptr::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 208
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 206-209
      * AssertionResult::AppendMessage calls unique_ptr::reset
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 207
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 206-209
      * AssertionResult::failure_message calls AssertionResult::message
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 187
@@ -49250,15 +49284,15 @@ Component Analysis Report
        callee range: 183-185
      * AssertionResult::message calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 184
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 183-185
      * AssertionResult::message calls unique_ptr::get
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 184
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 183-185
      * AssertionResult::message calls unique_ptr::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 184
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 183-185
      * AssertionResult::operator<< calls AssertionResult::AppendMessage
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-assertion-result.h line 192
@@ -49286,15 +49320,15 @@ Component Analysis Report
        callee range: 335-337
      * CanonicalizeForStdLibVersioning calls basic_string::compare
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-type-util.h line 63
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 61-71
      * CanonicalizeForStdLibVersioning calls basic_string::erase
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-type-util.h line 67
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 61-71
      * CanonicalizeForStdLibVersioning calls basic_string::find
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-type-util.h line 64
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 61-71
      * ChDir calls chdir
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 2089
@@ -49317,7 +49351,7 @@ Component Analysis Report
        callee range: 64-64
      * CheckedDowncastToActualType calls type_info::operator==
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1140
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/typeinfo
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/typeinfo
        caller range: 1138-1150
      * CmpHelperEQ calls AssertionSuccess
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 1384
@@ -49341,7 +49375,7 @@ Component Analysis Report
        callee range: 173-173
      * CmpHelperFloatingPointEQ calls setprecision
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 1581
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/iomanip
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/iomanip
        caller range: 1573-1591
      * CmpHelperGE calls AssertionSuccess
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 1467
@@ -49395,7 +49429,7 @@ Component Analysis Report
        callee range: 712-714
      * ConvertibleToIntegerPrinter::PrintValue calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 250
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 249-251
      * ConvertibleToStringViewPrinter::PrintValue calls UniversalPrint
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 257
@@ -49473,15 +49507,15 @@ Component Analysis Report
        callee range: 200-200
      * FilePath::IsEmpty calls basic_string::empty
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-filepath.h line 118
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 118-118
      * FilePath::Set calls basic_string::operator=
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-filepath.h line 83
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 83-83
      * FilePath::c_str calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-filepath.h line 86
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 86-86
      * FilePath::operator= calls FilePath::Set
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-filepath.h line 79
@@ -49529,7 +49563,7 @@ Component Analysis Report
        callee range: 1118-1122
      * FunctionPointerPrinter::PrintValue calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 176
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 169-178
      * FunctionPointerPrinter::PrintValue calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 171
@@ -49566,11 +49600,11 @@ Component Analysis Report
        callee range: 75-91
      * GetTypeName calls __cxa_demangle
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-type-util.h line 84
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cxxabi.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cxxabi.h
        caller range: 75-91
      * GetTypeName calls type_info::name
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-type-util.h line 76
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/typeinfo
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/typeinfo
        caller range: 75-91
      * InternalRunDeathTestFlag::~InternalRunDeathTestFlag calls Close
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-death-test-internal.h line 279
@@ -49627,7 +49661,7 @@ Component Analysis Report
        callee range: 235-237
      * Iterator::Equals calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 249
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 246-255
      * Iterator::Equals calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 249
@@ -49671,7 +49705,7 @@ Component Analysis Report
        callee range: 860-862
      * IteratorImpl::Equals calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 882
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 879-899
      * IteratorImpl::Equals calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 882
@@ -49814,7 +49848,7 @@ Component Analysis Report
        callee range: 769-779
      * MatchesRegexMatcher::DescribeNegationTo calls __shared_ptr_access::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-matchers.h line 858
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/shared_ptr_base.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/shared_ptr_base.h
        caller range: 855-859
      * MatchesRegexMatcher::DescribeNegationTo calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-matchers.h line 856
@@ -49833,7 +49867,7 @@ Component Analysis Report
        callee range: 769-779
      * MatchesRegexMatcher::DescribeTo calls __shared_ptr_access::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-matchers.h line 852
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/shared_ptr_base.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/shared_ptr_base.h
        caller range: 850-853
      * MatchesRegexMatcher::DescribeTo calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-matchers.h line 851
@@ -49857,7 +49891,7 @@ Component Analysis Report
        callee range: 935-937
      * MatchesRegexMatcher::MatchAndExplain calls __shared_ptr_access::operator*
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-matchers.h line 846
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/shared_ptr_base.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/shared_ptr_base.h
        caller range: 823-825
      * Message::Message calls Message::GetString
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-message.h line 106
@@ -49871,7 +49905,7 @@ Component Analysis Report
        callee range: 64-64
      * Message::Message calls unique_ptr::operator*
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-message.h line 106
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 102-102
      * Message::operator<< calls Message::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-message.h line 171
@@ -49880,7 +49914,7 @@ Component Analysis Report
        callee range: 116-134
      * Message::operator<< calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-message.h line 166
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 116-134
      * Message::operator<< calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-message.h line 152
@@ -49889,7 +49923,7 @@ Component Analysis Report
        callee range: 64-64
      * Message::operator<< calls unique_ptr::operator*
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-message.h line 132
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 116-134
      * Mutex::Mutex calls GTestLog::GetStream
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1699
@@ -49898,7 +49932,7 @@ Component Analysis Report
        callee range: 989-989
      * Mutex::Mutex calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1699
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1698-1701
      * Mutex::Mutex calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1699
@@ -49912,7 +49946,7 @@ Component Analysis Report
        callee range: 989-989
      * Mutex::~Mutex calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1702
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1702-1702
      * Mutex::~Mutex calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1702
@@ -49931,7 +49965,7 @@ Component Analysis Report
        callee range: 880-880
      * MutexBase::AssertHeld calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1660
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1659-1662
      * MutexBase::AssertHeld calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1660
@@ -49949,7 +49983,7 @@ Component Analysis Report
        callee range: 989-989
      * MutexBase::Lock calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1642
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1641-1645
      * MutexBase::Lock calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1642
@@ -49963,7 +49997,7 @@ Component Analysis Report
        callee range: 989-989
      * MutexBase::Unlock calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1654
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1648-1655
      * MutexBase::Unlock calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1654
@@ -49992,11 +50026,11 @@ Component Analysis Report
        callee range: 1125-1125
      * Notification::Notify calls condition_variable::notify_all
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1246
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/condition_variable
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/condition_variable
        caller range: 1243-1247
      * Notification::WaitForNotification calls condition_variable::wait
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1253
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/condition_variable
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/condition_variable
        caller range: 1251-1254
      * ParameterizedTestSuiteInfo::IsValidParamName calls IsAlNum
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 664
@@ -50005,15 +50039,15 @@ Component Analysis Report
        callee range: 1924-1926
      * ParameterizedTestSuiteInfo::IsValidParamName calls basic_string::empty
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 660
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 658-668
      * ParameterizedTestSuiteInfo::IsValidParamName calls basic_string::operator[]
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 664
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 658-668
      * ParameterizedTestSuiteInfo::IsValidParamName calls basic_string::size
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 663
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 658-668
      * ParameterizedTestSuiteInfo::RegisterTests calls GTestLog::GetStream
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 585
@@ -50052,23 +50086,23 @@ Component Analysis Report
        callee range: 658-668
      * ParameterizedTestSuiteInfo::RegisterTests calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 585
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 553-616
      * ParameterizedTestSuiteInfo::RegisterTests calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 600
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 553-616
      * ParameterizedTestSuiteInfo::RegisterTests calls basic_string::empty
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 569
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 553-616
      * ParameterizedTestSuiteInfo::RegisterTests calls basic_string::operator=
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 570
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 553-616
      * ParameterizedTestSuiteInfo::RegisterTests calls operator+
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 570
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 553-616
      * ParameterizedTestSuiteInfo::RegisterTests calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 585
@@ -50077,11 +50111,11 @@ Component Analysis Report
        callee range: 64-64
      * ParameterizedTestSuiteInfo::RegisterTests calls set::count
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 589
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_set.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_set.h
        caller range: 553-616
      * ParameterizedTestSuiteInfo::RegisterTests calls set::insert
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 593
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_set.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_set.h
        caller range: 553-616
      * ParameterizedTestSuiteRegistry::GetTestSuitePatternHolder calls Abort
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-param-util.h line 714
@@ -50170,11 +50204,11 @@ Component Analysis Report
        callee range: 656-656
      * PrintTo calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 552
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 440-442
      * PrintTo calls ios_base::precision
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 550
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/ios_base.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/ios_base.h
        caller range: 440-442
      * PrintTo calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 460
@@ -50183,7 +50217,7 @@ Component Analysis Report
        callee range: 64-64
      * PrintToString calls basic_stringstream::str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 1121
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/sstream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/sstream
        caller range: 1118-1122
      * PrintTupleTo calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 732
@@ -50192,11 +50226,11 @@ Component Analysis Report
        callee range: 64-64
      * ProtobufPrinter::PrintValue calls basic_string::length
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 234
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 232-238
      * ProtobufPrinter::PrintValue calls operator+
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 237
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 232-238
      * ProtobufPrinter::PrintValue calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 237
@@ -50210,7 +50244,7 @@ Component Analysis Report
        callee range: 932-934
      * RE::FullMatch calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 933
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 932-934
      * RE::PartialMatch calls RE::PartialMatch
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 936
@@ -50219,7 +50253,7 @@ Component Analysis Report
        callee range: 935-937
      * RE::PartialMatch calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 936
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 935-937
      * RE::RE calls RE::Init
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 917
@@ -50233,7 +50267,7 @@ Component Analysis Report
        callee range: 926-926
      * RE::RE calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 920
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 917-917
      * RUN_ALL_TESTS calls UnitTest::GetInstance
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 2323
@@ -50267,11 +50301,11 @@ Component Analysis Report
        callee range: 2087-2087
      * SharedPayloadBase::Ref calls __atomic_base::fetch_add
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-matchers.h line 244
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/atomic_base.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/atomic_base.h
        caller range: 244-244
      * SharedPayloadBase::Unref calls __atomic_base::fetch_sub
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-matchers.h line 245
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/atomic_base.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/atomic_base.h
        caller range: 245-245
      * SkipComma calls IsSpace
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 656
@@ -50301,27 +50335,27 @@ Component Analysis Report
        callee range: 1933-1935
      * StripTrailingSpaces calls __normal_iterator::operator*
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1969
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_iterator.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_iterator.h
        caller range: 1967-1971
      * StripTrailingSpaces calls __normal_iterator::operator--
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1969
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_iterator.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_iterator.h
        caller range: 1967-1971
      * StripTrailingSpaces calls __normal_iterator::operator=
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1969
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_iterator.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_iterator.h
        caller range: 1967-1971
      * StripTrailingSpaces calls basic_string::begin
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1969
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 1967-1971
      * StripTrailingSpaces calls basic_string::end
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1968
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 1967-1971
      * StripTrailingSpaces calls basic_string::erase
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1969
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 1967-1971
      * StripTrailingSpaces calls operator!=
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1969
@@ -50340,7 +50374,7 @@ Component Analysis Report
        callee range: 880-880
      * SuiteApiResolver::GetSetUpCaseOrSuite calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 528
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 521-539
      * SuiteApiResolver::GetSetUpCaseOrSuite calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 528
@@ -50359,7 +50393,7 @@ Component Analysis Report
        callee range: 880-880
      * SuiteApiResolver::GetTearDownCaseOrSuite calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 549
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 542-560
      * SuiteApiResolver::GetTearDownCaseOrSuite calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 549
@@ -50368,11 +50402,11 @@ Component Analysis Report
        callee range: 64-64
      * TersePrintPrefixToStrings calls basic_stringstream::str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 1100
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/sstream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/sstream
        caller range: 1091-1091
      * TersePrintPrefixToStrings calls vector::push_back
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 1100
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h
        caller range: 1091-1091
      * Test::HasFailure calls Test::HasFatalFailure
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 297
@@ -50391,7 +50425,7 @@ Component Analysis Report
        callee range: 508-508
      * TestInfo::file calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 573
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 573-573
      * TestInfo::increment_death_test_count calls TestResult::increment_death_test_count
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 636
@@ -50400,7 +50434,7 @@ Component Analysis Report
        callee range: 502-502
      * TestInfo::name calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 556
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 556-556
      * TestInfo::test_case_name calls TestInfo::test_suite_name
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 552
@@ -50409,31 +50443,31 @@ Component Analysis Report
        callee range: 548-548
      * TestInfo::test_suite_name calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 548
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 548-548
      * TestInfo::type_param calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 561
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 560-563
      * TestInfo::type_param calls unique_ptr::get
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 561
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 560-563
      * TestInfo::type_param calls unique_ptr::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 561
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 560-563
      * TestInfo::value_param calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 568
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 567-570
      * TestInfo::value_param calls unique_ptr::get
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 568
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 567-570
      * TestInfo::value_param calls unique_ptr::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 568
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 567-570
      * TestPartResult::TestPartResult calls TestPartResult::ExtractSummary
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-test-part.h line 73
@@ -50452,31 +50486,31 @@ Component Analysis Report
        callee range: 102-102
      * TestPartResult::file_name calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-test-part.h line 82
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 81-83
      * TestPartResult::file_name calls basic_string::empty
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-test-part.h line 82
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 81-83
      * TestPartResult::message calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-test-part.h line 93
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 93-93
      * TestPartResult::summary calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-test-part.h line 90
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 90-90
      * TestProperty::SetValue calls basic_string::operator=
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 392
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 392-392
      * TestProperty::key calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 386
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 386-386
      * TestProperty::value calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 389
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 389-389
      * TestResult::Passed calls TestResult::Failed
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 423
@@ -50575,19 +50609,19 @@ Component Analysis Report
        callee range: 426-426
      * TestSuite::name calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 702
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 702-702
      * TestSuite::type_param calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 707
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 706-709
      * TestSuite::type_param calls unique_ptr::get
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 707
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 706-709
      * TestSuite::type_param calls unique_ptr::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest.h line 707
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/unique_ptr.h
        caller range: 706-709
      * ThreadFuncWithCLinkage calls ThreadWithParamBase::Run
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1287
@@ -50601,7 +50635,7 @@ Component Analysis Report
        callee range: 989-989
      * ThreadLocal::CreateKey calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1789
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1785-1792
      * ThreadLocal::CreateKey calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1789
@@ -50615,7 +50649,7 @@ Component Analysis Report
        callee range: 989-989
      * ThreadLocal::GetOrCreateValue calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1803
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1794-1805
      * ThreadLocal::GetOrCreateValue calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1803
@@ -50644,7 +50678,7 @@ Component Analysis Report
        callee range: 989-989
      * ThreadLocal::~ThreadLocal<T> calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1762
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1756-1763
      * ThreadLocal::~ThreadLocal<T> calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1762
@@ -50658,7 +50692,7 @@ Component Analysis Report
        callee range: 989-989
      * ThreadWithParam::Join calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1323
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1321-1326
      * ThreadWithParam::Join calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1323
@@ -50677,7 +50711,7 @@ Component Analysis Report
        callee range: 989-989
      * ThreadWithParam::ThreadWithParam<T> calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1316
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 1312-1318
      * ThreadWithParam::ThreadWithParam<T> calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-port.h line 1316
@@ -50709,15 +50743,15 @@ Component Analysis Report
        callee range: 1967-1971
      * TypeParameterizedTest::Register calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 729
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 721-750
      * TypeParameterizedTest::Register calls operator+
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 729
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 721-750
      * TypeParameterizedTest::Register calls vector::operator[]
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 730
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_vector.h
        caller range: 721-750
      * TypeParameterizedTestSuite::Register calls Abort
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 792
@@ -50761,7 +50795,7 @@ Component Analysis Report
        callee range: 618-620
      * TypeParameterizedTestSuite::Register calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 788
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 782-808
      * TypeParameterizedTestSuite::Register calls fflush
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 791
@@ -50783,7 +50817,7 @@ Component Analysis Report
        callee range: 963-963
      * TypedTestSuitePState::AddTestName calls basic_string::c_str
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 609
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/basic_string.h
        caller range: 604-616
      * TypedTestSuitePState::AddTestName calls fflush
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 610
@@ -50795,11 +50829,11 @@ Component Analysis Report
        caller range: 604-616
      * TypedTestSuitePState::AddTestName calls make_pair
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 614
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_pair.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_pair.h
        caller range: 604-616
      * TypedTestSuitePState::AddTestName calls map::insert
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 613
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
        caller range: 604-616
      * TypedTestSuitePState::GetCodeLocation calls GTestLog::GetStream
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 624
@@ -50813,15 +50847,15 @@ Component Analysis Report
        callee range: 880-880
      * TypedTestSuitePState::GetCodeLocation calls _Rb_tree_const_iterator::operator->
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 625
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_tree.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_tree.h
        caller range: 622-626
      * TypedTestSuitePState::GetCodeLocation calls map::end
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 624
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
        caller range: 622-626
      * TypedTestSuitePState::GetCodeLocation calls map::find
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 623
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
        caller range: 622-626
      * TypedTestSuitePState::GetCodeLocation calls operator!=
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 624
@@ -50835,7 +50869,7 @@ Component Analysis Report
        callee range: 64-64
      * TypedTestSuitePState::TestExists calls map::count
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/internal/gtest-internal.h line 619
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_map.h
        caller range: 618-620
      * UniversalPrintArray calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 881
@@ -50849,7 +50883,7 @@ Component Analysis Report
        callee range: 75-91
      * UniversalPrinter::GetTypeName calls any::type
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 806
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/any
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/any
        caller range: 804-811
      * UniversalPrinter::Print calls Nullopt
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 835
@@ -50863,11 +50897,11 @@ Component Analysis Report
        callee range: 804-811
      * UniversalPrinter::Print calls any::has_value
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 796
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/any
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/any
        caller range: 769-779
      * UniversalPrinter::Print calls basic_ostream::operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 943
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/ostream
        caller range: 769-779
      * UniversalPrinter::Print calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 797
@@ -50916,7 +50950,7 @@ Component Analysis Report
        callee range: 188-188
      * operator<< calls declval
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-printers.h line 212
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/type_traits
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/type_traits
        caller range: 64-64
      * operator<< calls operator<<
        from /home/minilie/ohos/OH5/third_party/googletest/googletest/include/gtest/gtest-message.h line 201
@@ -52069,11 +52103,11 @@ Component Analysis Report
        callee range: 154-160
      * TransAffine::Rotate calls cos
        from /home/minilie/ohos/OH5/foundation/graphic/graphic_utils_lite/interfaces/kits/gfx_utils/trans_affine.h line 250
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
        caller range: 249-260
      * TransAffine::Rotate calls sin
        from /home/minilie/ohos/OH5/foundation/graphic/graphic_utils_lite/interfaces/kits/gfx_utils/trans_affine.h line 250
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
        caller range: 249-260
      * TransAffine::ScalingAbs calls Sqrt
        from /home/minilie/ohos/OH5/foundation/graphic/graphic_utils_lite/interfaces/kits/gfx_utils/trans_affine.h line 286
@@ -52087,11 +52121,11 @@ Component Analysis Report
        callee range: 21-33
      * TransAffine::TransAffineRotation calls cos
        from /home/minilie/ohos/OH5/foundation/graphic/graphic_utils_lite/interfaces/kits/gfx_utils/trans_affine.h line 192
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
        caller range: 191-193
      * TransAffine::TransAffineRotation calls sin
        from /home/minilie/ohos/OH5/foundation/graphic/graphic_utils_lite/interfaces/kits/gfx_utils/trans_affine.h line 192
-       to /usr/lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
+       to /Log/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cmath
        caller range: 191-193
      * TransAffine::operator*= calls TransAffine::Multiply
        from /home/minilie/ohos/OH5/foundation/graphic/graphic_utils_lite/interfaces/kits/gfx_utils/trans_affine.h line 127
@@ -55510,5 +55544,5 @@ Component Analysis Report
 4. Overall Statistics:
    - Total components: 41
    - Total functions: 11629
-   - Total inter-component calls: 9643
-   - Total files analyzed: 939
+   - Total inter-component calls: 9649
+   - Total files analyzed: 940

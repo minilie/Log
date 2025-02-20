@@ -12,7 +12,6 @@ import requests
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class CallInfo:
     caller_func: str
@@ -33,7 +32,6 @@ class CallInfo:
         match = re.search(r'OH5/[^/]+/[^/]+/([^/]+)/', self.callee_file)
         return match.group(1).upper() if match else "UNKNOWN"
 
-
 class AsyncComponentAnalyzer:
     def __init__(self, api_key: str, base_url: str = "https://api.deepseek.com", use_local: bool = False):
         self.use_local = use_local
@@ -48,22 +46,20 @@ class AsyncComponentAnalyzer:
         try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 lines = f.readlines()
-                start_idx = max(0, start_line - 2)
-                end_idx = min(len(lines), end_line)
-                function_lines = [line.lstrip() for line in lines[start_idx:end_idx]]
-                return ''.join(function_lines)
+                start_idx = max(0, start_line - 10)
+                end_idx = min(len(lines), end_line + 5)
+                function_lines = [line.rstrip() for line in lines[start_idx:end_idx]]
+                return '\n'.join(function_lines)
         except Exception as e:
             logger.warning(f"Error reading file {file_path}: {e}")
             return ""
 
-    # 组件交互下每个以*开头的5行为一个函数调用信息
     def parse_call_block(self, block: str) -> Optional[CallInfo]:
         try:
             lines = [line.strip() for line in block.strip().split('\n')]
             if len(lines) < 5:
                 return None
 
-            # 第一行：形如 "* caller_func calls callee_func"
             first_line = lines[0].removeprefix('*').strip()
             if ' calls ' not in first_line:
                 return None
@@ -101,12 +97,11 @@ class AsyncComponentAnalyzer:
             logger.error(f"Error parsing block: {e}\nProblematic block:\n{block}")
             return None
 
-    # 生成给大模型的 prompt
     def generate_llm_prompt(self, call_info: CallInfo) -> str:
         caller_code = self.extract_function_block(
             call_info.caller_file,
-            call_info.caller_range[0],
-            call_info.caller_range[1]
+            call_info.caller_range[0] - 10,
+            call_info.caller_range[1] + 5
         )
         callee_code = self.extract_function_block(
             call_info.callee_file,
@@ -114,19 +109,34 @@ class AsyncComponentAnalyzer:
             call_info.callee_range[1]
         )
         system_prompt = (
-            "You are a specialized code analyzer that generates ONLY a single line of standardized log output. "
-            "Do not provide any additional explanation or context.\n"
-            "REQUIRED OUTPUT FORMAT:\n"
-            "[component_name] caller_function: action | target_component.callee_function [brief_details]\n"
-            "FORMAT RULES:\n"
-            "- component_name: Uppercase component name\n"
-            "- action: Use present tense verbs (processes, handles, validates)\n"
-            "- target_component: Uppercase component name\n"
-            "- brief_details: Describe the core purpose in 5-7 words\n"
-            "- Square brackets and colons must be exactly as shown\n"
-            "- Must be exactly ONE line with no additional text"
+            "You are a specialized code analyzer that generates EXACTLY ONE LINE of valid C++ log statement using HILOG_<LEVEL>.\n"
+            "Requirements:\n"
+            "1. Choose LEVEL: DEBUG for condition checks, INFO for normal operations, WARN for potential issues, ERROR for failures\n"
+            "2. Format with param: HILOG_<LEVEL>(\"[<CALLER_COMPONENT>] <operation> <target>, <param_name>=0x%x\", (UINTPTR)¶m)\n"
+            "3. Format without param: HILOG_<LEVEL>(\"[<CALLER_COMPONENT>] <operation> <target>\")\n"
+            "4. <operation> is a verb derived from caller/callee name (e.g., 'schedules', 'processes')\n"
+            "5. <target> is a noun from callee (e.g., 'task', 'system')\n"
+            "6. <param_name> handling:\n"
+            "   - Use ONLY the exact parameter name if explicitly passed in the call (e.g., 'func(param)' uses 'param')\n"
+            "   - If the call has no parameters and is DIRECTLY INSIDE an 'if' condition branch (e.g., 'if (var) { func(); }'), use the condition variable from the 'if' statement (e.g., 'var')\n"
+            "   - If the call has no parameters and is NOT DIRECTLY INSIDE an 'if' condition branch, do NOT include any parameter\n"
+            "7. Do NOT use function return values (e.g., 'isSwitch') or variables not explicitly passed or used as the condition in the immediately preceding 'if' statement\n"
+            "8. Output must be a single line ending with semicolon, starting with HILOG_<LEVEL>\n"
+            "Examples with Scenarios:\n"
+            "- Scenario 1 (With explicit parameter):\n"
+            "  Code: void ProcessData(int data) { HandleInput(data); }\n"
+            "  Output: HILOG_INFO(\"[ARCH] processes task, data=0x%x\", (UINTPTR)&data);\n"
+            "- Scenario 2 (No param, inside condition):\n"
+            "  Code: void CheckSched() { if (g_condition) { LOS_Schedule(); } }\n"
+            "  Output: HILOG_DEBUG(\"[ARCH] schedules task, g_condition=0x%x\", (UINTPTR)&g_condition);\n"
+            "- Scenario 3 (No param, no condition):\n"
+            "  Code: void InitSystem() { int x = 1; if (x) { y = 2; } StartTask(); }\n"
+            "  Output: HILOG_INFO(\"[ARCH] starts task\");\n"
+            "- Scenario 4 (No param, after condition):\n"
+            "  Code: void RunTask() { if (flag) { x = 1; } TaskRun(); }\n"
+            "  Output: HILOG_INFO(\"[ARCH] runs task\");\n"
         )
-        return f"""Here are two related functions. Generate a standardized log message describing their interaction:
+        return f"""Analyze and generate a log statement:
 
 Caller Function ({call_info.caller_component}):
 {caller_code}
@@ -134,44 +144,89 @@ Caller Function ({call_info.caller_component}):
 Callee Function ({call_info.callee_component}):
 {callee_code}
 
-Call occurs when {call_info.caller_func} calls {call_info.callee_func} at line {call_info.call_line}"""
+Call: {call_info.caller_func} calls {call_info.callee_func} at line {call_info.call_line}"""
 
-    # 调用大模型接口获取响应并包装日志
+    # 将单行HILOG包装为条件编译块
+    def wrap_log_in_conditional(self, log_line: str) -> str:
+        if not log_line.startswith('HILOG_') or not log_line.endswith(';'):
+            return f'#ifdef HILOG_INFO\nHILOG_INFO("[{self.caller_component}] invokes {self.callee_component}");\n#else\nprintf("[{self.caller_component}] invokes {self.callee_component}\\n");\n#endif'
+        
+        # 提取 HILOG 级别和内容
+        match = re.match(r'HILOG_(DEBUG|INFO|WARN|ERROR)\((.*)\);', log_line)
+        if not match:
+            return f'#ifdef HILOG_INFO\nHILOG_INFO("[{self.caller_component}] invokes {self.callee_component}");\n#else\nprintf("[{self.caller_component}] invokes {self.callee_component}\\n");\n#endif'
+        
+        level, content = match.groups()
+        if "0x%x" in content:
+            # 有参数的情况，换行符在格式字符串内
+            printf_content = content.replace("0x%x", "0x%08x").replace('",', '\\n",')
+        else:
+            # 无参数的情况
+            printf_content = content.replace('")', '\\n")')
+        
+        return f'#ifdef HILOG_INFO\n{log_line}\n#else\nprintf({printf_content});\n#endif'
+
     async def get_llm_response(self, prompt: str, call_info: CallInfo) -> str:
         async with self.semaphore:
+            self.caller_component = call_info.caller_component
+            self.callee_component = call_info.callee_component
             system_prompt = (
-                "You are a specialized code analyzer that generates ONLY a single line of standardized log output. "
-                "Do not provide any additional explanation or context.\n"
-                "REQUIRED OUTPUT FORMAT:\n"
-                "[component_name] caller_function: action | target_component.callee_function [brief_details]\n"
-                "FORMAT RULES:\n"
-                "- component_name: Uppercase component name\n"
-                "- action: Use present tense verbs (processes, handles, validates)\n"
-                "- target_component: Uppercase component name\n"
-                "- brief_details: Describe the core purpose in 5-7 words\n"
-                "- Square brackets and colons must be exactly as shown\n"
-                "- Must be exactly ONE line with no additional text"
+                "You are a specialized code analyzer that generates EXACTLY ONE LINE of valid C++ log statement using HILOG_<LEVEL>.\n"
+                "Requirements:\n"
+                "1. Choose LEVEL: DEBUG for condition checks, INFO for normal operations, WARN for potential issues, ERROR for failures\n"
+                "2. Format with param: HILOG_<LEVEL>(\"[<CALLER_COMPONENT>] <operation> <target>, <param_name>=0x%x\", (UINTPTR)¶m)\n"
+                "3. Format without param: HILOG_<LEVEL>(\"[<CALLER_COMPONENT>] <operation> <target>\")\n"
+                "4. <operation> is a verb from caller/callee name (e.g., 'schedules', 'processes')\n"
+                "5. <target> is a noun from callee (e.g., 'task', 'system')\n"
+                "6. <param_name> is the exact parameter name ONLY if explicitly passed in the call (e.g., 'func(param)' uses 'param'); "
+                "if no param is passed, use condition variable from 'if' statement ONLY if the call is directly inside an 'if' branch; "
+                "if no param and no condition branch, do NOT include any parameter\n"
+                "7. Do NOT use function return values (e.g., 'isSwitch') or variables not explicitly passed or conditioned in the 'if' statement\n"
+                "8. Output must be a single line ending with semicolon, starting with HILOG_<LEVEL>\n"
+                "Examples with Scenarios:\n"
+                "- Scenario 1 (With explicit parameter):\n"
+                "  Code: void ProcessData(int data) { HandleInput(data); }\n"
+                "  Output: HILOG_INFO(\"[ARCH] processes task, data=0x%x\", (UINTPTR)&data);\n"
+                "- Scenario 2 (No param, inside condition):\n"
+                "  Code: void CheckSched() { if (g_condition) { LOS_Schedule(); } }\n"
+                "  Output: HILOG_DEBUG(\"[ARCH] schedules task, g_condition=0x%x\", (UINTPTR)&g_condition);\n"
+                "- Scenario 3 (No param, no condition):\n"
+                "  Code: void InitSystem() { int x = 1; if (x) { y = 2; } StartTask(); }\n"
+                "  Output: HILOG_INFO(\"[ARCH] starts task\");\n"
+                "- Scenario 4 (No param, after condition):\n"
+                "  Code: void RunTask() { if (flag) { x = 1; } TaskRun(); }\n"
+                "  Output: HILOG_INFO(\"[ARCH] runs task\");\n"
             )
             if self.use_local:
                 combined_prompt = system_prompt + "\n" + prompt
                 try:
                     response = await asyncio.to_thread(
                         lambda: requests.post(self.base_url, json={
-                            "model": "llama3.1:70b",
+                            "model": "llama3.1:70b", # 需要修改本地大模型型号
                             "prompt": combined_prompt,
                             "stream": False,
                         })
                     )
                     if response.status_code != 200:
                         logger.error(f"Local LLM API error {response.status_code}: {response.text}")
-                        return f"Error generating log for {call_info.caller_func} -> {call_info.callee_func}"
+                        return self.wrap_log_in_conditional(f'HILOG_ERROR("[{call_info.caller_component}] handles {call_info.callee_component}, error=0x%x", errno)') + f'\n insert [{call_info.caller_file}:{call_info.call_line}]'
                     json_response = response.json()
                     raw_response = json_response.get("response", "").strip()
-                    cleaned_response = re.sub(r'<think>.*?</think>', '', raw_response, flags=re.DOTALL).strip()
-                    return f'HILOG_INFO("{cleaned_response}"); insert [{call_info.caller_file}:{call_info.call_line}]'
+                    log_line = next((line.strip() for line in raw_response.split('\n') if line.strip().startswith('HILOG_') and line.strip().endswith(';')), None)
+                    if not log_line:
+                        return self.wrap_log_in_conditional(f'HILOG_INFO("[{call_info.caller_component}] invokes {call_info.callee_component}")') + f'\n insert [{call_info.caller_file}:{call_info.call_line}]'
+                    # 后处理：移除非显式参数和返回值
+                    caller_code = self.extract_function_block(call_info.caller_file, call_info.caller_range[0] - 10, call_info.caller_range[1] + 5)
+                    call_line_index = caller_code.find(call_info.callee_func)
+                    preceding_lines = caller_code[:call_line_index].split('\n')[-5:]  # 检查前5行
+                    in_if_branch = any('if' in line and '{' in line for line in preceding_lines) and call_line_index < caller_code.find('}', call_line_index)
+                    has_param = re.search(rf'{call_info.callee_func}\s*\(\s*\w+\s*\)', caller_code)
+                    if "0x%x" in log_line and not has_param and not in_if_branch:
+                        log_line = f'HILOG_{log_line.split("_")[1].split("(")[0]}("[{call_info.caller_component}] {log_line.split("]")[1].split(",")[0].strip()}")'
+                    return self.wrap_log_in_conditional(log_line) + f'\n insert [{call_info.caller_file}:{call_info.call_line}]'
                 except Exception as e:
                     logger.error(f"Error calling local LLM API: {e}")
-                    return f"Error generating log for {call_info.caller_func} -> {call_info.callee_func}"
+                    return self.wrap_log_in_conditional(f'HILOG_ERROR("[{call_info.caller_component}] handles {call_info.callee_component}, error=0x%x", errno)') + f'\n insert [{call_info.caller_file}:{call_info.call_line}]'
             else:
                 try:
                     response = await asyncio.to_thread(
@@ -183,17 +238,26 @@ Call occurs when {call_info.caller_func} calls {call_info.callee_func} at line {
                         ],
                         stream=False
                     )
-                    log_message = response.choices[0].message.content.strip()
-                    return f'HILOG_INFO("{log_message}"); insert [{call_info.caller_file}:{call_info.call_line}]'
+                    raw_response = response.choices[0].message.content.strip()
+                    log_line = next((line.strip() for line in raw_response.split('\n') if line.strip().startswith('HILOG_') and line.strip().endswith(';')), None)
+                    if not log_line:
+                        return self.wrap_log_in_conditional(f'HILOG_INFO("[{call_info.caller_component}] invokes {call_info.callee_component}")') + f'\n insert [{call_info.caller_file}:{call_info.call_line}]'
+                    # 后处理：移除非显式参数和返回值
+                    caller_code = self.extract_function_block(call_info.caller_file, call_info.caller_range[0] - 10, call_info.caller_range[1] + 5)
+                    call_line_index = caller_code.find(call_info.callee_func)
+                    preceding_lines = caller_code[:call_line_index].split('\n')[-5:]  # 检查前5行
+                    in_if_branch = any('if' in line and '{' in line for line in preceding_lines) and call_line_index < caller_code.find('}', call_line_index)
+                    has_param = re.search(rf'{call_info.callee_func}\s*\(\s*\w+\s*\)', caller_code)
+                    if "0x%x" in log_line and not has_param and not in_if_branch:
+                        log_line = f'HILOG_{log_line.split("_")[1].split("(")[0]}("[{call_info.caller_component}] {log_line.split("]")[1].split(",")[0].strip()}")'
+                    return self.wrap_log_in_conditional(log_line) + f'\n insert [{call_info.caller_file}:{call_info.call_line}]'
                 except Exception as e:
                     logger.error(f"Error calling LLM API: {e}")
-                    return f"Error generating log for {call_info.caller_func} -> {call_info.callee_func}"
+                    return self.wrap_log_in_conditional(f'HILOG_ERROR("[{call_info.caller_component}] handles {call_info.callee_component}, error=0x%x", errno)') + f'\n insert [{call_info.caller_file}:{call_info.call_line}]'
 
-    # 提取交互块
     def extract_target_interaction(self, content: str, target: str) -> Optional[List[str]]:
         blocks = []
         lines = content.splitlines()
-        # 指定 target 情况：只提取目标标题下的块
         if target:
             capturing = False
             current_block = []
@@ -204,7 +268,6 @@ Call occurs when {call_info.caller_func} calls {call_info.callee_func} at line {
                 if stripped == target + ':':
                     capturing = True
                     continue
-                # 当遇到下一个 "->" 标题时结束采集
                 if capturing and re.match(r'^.+? -> .+?:$', stripped):
                     break
                 if capturing:
@@ -220,7 +283,6 @@ Call occurs when {call_info.caller_func} calls {call_info.callee_func} at line {
                 blocks.append('\n'.join(current_block))
             return blocks if blocks else None
         else:
-            # 未指定 target，扫描所有形如 "组件A -> 组件B:" 的标题，并提取其下的调用日志块
             pattern = re.compile(r'^.+? -> .+?:$')
             current_block = []
             capturing = False
@@ -229,7 +291,6 @@ Call occurs when {call_info.caller_func} calls {call_info.callee_func} at line {
                 if not stripped:
                     continue
                 if pattern.match(stripped):
-                    # 遇到新的标题，先将已有 block 按 5 行一组保存
                     if current_block:
                         for i in range(0, len(current_block), 5):
                             group = current_block[i:i+5]
@@ -247,15 +308,11 @@ Call occurs when {call_info.caller_func} calls {call_info.callee_func} at line {
                         blocks.append("\n".join(group))
             return blocks if blocks else None
 
-
-# 显示带行号的预览
 def preview_with_line_numbers(file_content: str) -> None:
     lines = file_content.splitlines()
     for idx, line in enumerate(lines, start=1):
         print(f"{idx:4}: {line}")
 
-
-# 倒序插入日志行（便于多处插入时不影响后续行号）
 def insert_multiple_logs_reverse(file_content: str, insertions: List[Tuple[int, str]], highlight: bool = False) -> str:
     lines = file_content.splitlines(keepends=True)
     prefix = "\033[1;32m" if highlight else ""
@@ -264,41 +321,26 @@ def insert_multiple_logs_reverse(file_content: str, insertions: List[Tuple[int, 
     for line_number, log_line in insertions_sorted:
         index = max(0, line_number - 1)
         if highlight:
-            log_line = f"{prefix}{log_line}{suffix}"
+            log_line_colored = ""
+            for line in log_line.split('\n'):
+                log_line_colored += f"{prefix}{line}{suffix}\n"
+            log_line = log_line_colored.rstrip('\n')
         lines.insert(index, log_line + "\n")
     return "".join(lines)
-
-
-# 偏移插入日志行
-def insert_multiple_logs_with_offset(file_content: str, insertions: List[Tuple[int, str]], highlight: bool = False) -> str:
-    lines = file_content.splitlines(keepends=True)
-    prefix = "\033[1;32m" if highlight else ""
-    suffix = "\033[0m" if highlight else ""
-    offset = 0
-    for line_number, log_line in sorted(insertions, key=lambda x: x[0]):
-        index = max(0, line_number - 1 + offset)
-        if highlight:
-            log_line = f"{prefix}{log_line}{suffix}"
-        lines.insert(index, log_line + "\n")
-        offset += 1
-    return "".join(lines)
-
 
 async def main():
     parser = argparse.ArgumentParser(
-        description='分析组件交互并预览或实际插入日志'
+        description='分析组件交互并预览或直接插入日志到源文件'
     )
     parser.add_argument('api_key', nargs='?', default='', help='大模型 API 的 API key（使用本地大模型时可省略）')
     parser.add_argument('--target', '-t', required=False,
-                        help='待分析的目标交互（例如："FatFs -> liteos_m"），若不指定则扫描报告中所有形如 "组件A -> 组件B:" 的部分')
+                        help='待分析的目标交互（例如："arch -> kernel"）')
     parser.add_argument('--actual-insert', action='store_true',
-                        help='实际将日志插入到源文件（无行号和高亮）')
-    parser.add_argument('--insert-mode', choices=['reverse', 'offset'], default='reverse',
-                        help='多处插入时使用的策略，默认为 reverse')
+                        help='直接将日志插入到源文件')
     parser.add_argument('--base_url', default="https://api.deepseek.com",
                         help='大模型 API 的 Base URL')
     parser.add_argument('--local', action='store_true',
-                        help='使用本地大模型（例如通过 http://localhost:11434/api/generate）')
+                        help='使用本地大模型')
     args = parser.parse_args()
 
     if not args.local and not args.api_key:
@@ -309,22 +351,13 @@ async def main():
     analyzer = AsyncComponentAnalyzer(api_key=args.api_key, base_url=args.base_url, use_local=args.local)
     content = sys.stdin.read()
 
-    # 如果提供 target，则只分析该部分；否则扫描所有 "组件A -> 组件B:" 部分
-    if args.target:
-        blocks = analyzer.extract_target_interaction(content, args.target)
-    else:
-        blocks = analyzer.extract_target_interaction(content, "")
-
+    blocks = analyzer.extract_target_interaction(content, args.target) if args.target else analyzer.extract_target_interaction(content, "")
     if not blocks:
         logger.error(f"No interaction found for: {args.target}" if args.target else "No interactions found")
         return
 
     print(f"\nAnalyzing interaction: {args.target if args.target else 'All Components'}")
     print("Found", len(blocks), "function calls to analyze")
-
-    # 输出正在分析的交互信息
-    interaction_title = args.target if args.target else "All Components"
-    print(f"\nGenerated Logs for {interaction_title}:")
 
     tasks = []
     logs = []
@@ -335,7 +368,6 @@ async def main():
             task = analyzer.get_llm_response(prompt, call_info)
             tasks.append(task)
 
-    # 使用 asyncio.as_completed 逐个输出结果
     if tasks:
         for future in asyncio.as_completed(tasks):
             log = await future
@@ -359,40 +391,22 @@ async def main():
             try:
                 with open(file_path, "r", encoding='utf-8', errors='ignore') as f:
                     file_content = f.read()
-            except Exception as e:
-                logger.warning(f"Error reading file {file_path}: {e}")
-                continue
-
-            if args.insert_mode == "reverse":
                 modified_content = insert_multiple_logs_reverse(file_content, insertions, highlight=False)
-            else:
-                modified_content = insert_multiple_logs_with_offset(file_content, insertions, highlight=False)
-
-            try:
-                bak_file_path = file_path + ".bak"
-                with open(bak_file_path, "w", encoding='utf-8') as f:
+                with open(file_path, "w", encoding='utf-8') as f:
                     f.write(modified_content)
-                print(f"Backup file updated: {bak_file_path}")
+                print(f"Updated source file: {file_path}")
             except Exception as e:
-                logger.warning(f"Error writing to backup file {bak_file_path}: {e}")
+                logger.warning(f"Error processing file {file_path}: {e}")
     else:
         for file_path, insertions in insertions_by_file.items():
             try:
                 with open(file_path, "r", encoding='utf-8', errors='ignore') as f:
                     file_content = f.read()
+                modified_content = insert_multiple_logs_reverse(file_content, insertions, highlight=True)
+                print(f"\n==== Preview of inserted file: {file_path} ====")
+                preview_with_line_numbers(modified_content)
             except Exception as e:
                 logger.warning(f"Error reading file {file_path}: {e}")
-                continue
-
-            if args.insert_mode == "reverse":
-                modified_content = insert_multiple_logs_reverse(file_content, insertions, highlight=True)
-            else:
-                modified_content = insert_multiple_logs_with_offset(file_content, insertions, highlight=True)
-
-            print(f"\n==== Preview of inserted file: {file_path} ====")
-            preview_with_line_numbers(modified_content)
-
 
 if __name__ == "__main__":
     asyncio.run(main())
-

@@ -4,3 +4,4 @@ mkdir build
 cd build/
 cmake ..
 make
+cp function-analyzer ../
