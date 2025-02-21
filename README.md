@@ -4,7 +4,7 @@
 
 ### 1.1 容器环境设置
 
-使用提供的Dockerfile创建运行环境：
+使用提供的Dockerfile创建运行环境 **( linux )** ：
 
 ```bash
 # 构建容器镜像
@@ -13,6 +13,16 @@ docker build -t function-analyzer .
 # 运行容器，挂载代码目录
 docker run -it --rm --network host -v $(pwd):/Log -v /home/minilie/ohos/OH5:/home/minilie/ohos/OH5 function-analyzer
 #/home/minilie/ohos/OH5 为OpenHarmony源码所在目录
+```
+
+**windows：**
+
+```bash
+# 拉取容器镜像
+docker pull minilie270/function-analyzer:latest
+
+# D:\Log为工具目录，这里主要是将克隆下来的工具目录挂载到/Log文件夹下，再将OpenHarmony源码挂载到相应的位置，例如OpenHarmony源码位于D:\OH5，那么就挂载到/D/OH5处，因为OpenHarmony编译时产生的编译数据库中记录的文件路径为源码所在路径，要想在容器内访问源码就必须保证挂载路径相同
+docker run -it --rm --network host -v "D:\Log:/Log" -v "D:\OH5:/D/OH5" minilie270/function-analyzer:latest
 ```
 
 若不使用Docker
@@ -84,6 +94,7 @@ cp function-analyzer ../
 #在OpenHarmony源码目录下编译
 hb build --gn-flags=--export-compile-commands # 编译导出编译数据库
 
+# /home/minilie/ohos/OH5 为OpenHarmony源码路径
 cp /home/minilie/ohos/OH5/out/riscv32_virt/qemu_riscv_mini_system_demo/compile_commands.json .
 ```
 
