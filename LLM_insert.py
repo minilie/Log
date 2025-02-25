@@ -218,10 +218,33 @@ Component: Caller=[{call_info.caller_component}], Callee=[{call_info.callee_comp
                         json=json_data,
                         verify=False
                     )
-                    dict0 = json.loads(response.text)
-                    raw_response = dict0['choices'][0]['message']['content']
-                    answer0 = json.loads(raw_response)
-                    log_line = answer0 if isinstance(answer0, str) else f'HILOG_INFO("[{call_info.caller_component}] invokes {call_info.callee_component}")'
+                    # 调试：记录原始响应
+                    logger.info(f"Huawei API response status: {response.status_code}")
+                    logger.info(f"Huawei API response text: {response.text}")
+                    if response.status_code != 200:
+                        raise ValueError(f"Huawei API returned non-200 status: {response.status_code}")
+                    if not response.text.strip():
+                        raise ValueError("Huawei API returned empty response")
+                    # 假设华为 API 返回纯文本
+                    raw_response = response.text.strip()
+                    # 尝试提取 HILOG_<LEVEL> 格式的日志行
+                    log_line = next(
+                        (line.strip() for line in raw_response.split('\n') if line.strip().startswith('HILOG_') and line.strip().endswith(';')),
+                        None
+                    )
+                    if not log_line:
+                        # 如果没有有效的 HILOG 行，检查是否是 JSON 格式（兼容旧假设）
+                        try:
+                            dict0 = json.loads(raw_response)
+                            if 'choices' in dict0 and dict0['choices']:
+                                raw_content = dict0['choices'][0]['message']['content']
+                                answer0 = json.loads(raw_content) if raw_content.startswith('{') else raw_content
+                                log_line = answer0 if isinstance(answer0, str) else f'HILOG_INFO("[{call_info.caller_component}] invokes {call_info.callee_component}")'
+                            else:
+                                log_line = f'HILOG_INFO("[{call_info.caller_component}] invokes {call_info.callee_component}")'
+                        except json.JSONDecodeError:
+                            # 如果不是 JSON，则使用默认日志
+                            log_line = f'HILOG_INFO("[{call_info.caller_component}] invokes {call_info.callee_component}")'
                 except Exception as e:
                     logger.error(f"Error calling Huawei API: {e}")
                     log_line = f'HILOG_ERROR("[{call_info.caller_component}] handles {call_info.callee_component}")'
@@ -386,16 +409,17 @@ async def main():
                         help='大模型 API 的 Base URL')
     parser.add_argument('--local', action='store_true',
                         help='使用本地大模型')
-    parser.add_argument('--huawei', action='store_true', help='使用华为API')
+    parser.add_argument('--huawei', action='store_true',
+                        help='使用华为')
     parser.add_argument('--bearer-token', help='Bearer token for Huawei API authentication')
     args = parser.parse_args()
 
-    if not args.local and not args.use_huawei and not args.api_key:
-        parser.error("非本地模式必须提供 api_key")
+    if not args.local and not args.huawei and not args.api_key:
+        parser.error("非本地模式时必须提供 api_key")
     if args.local and args.base_url == "https://api.deepseek.com":
         args.base_url = "http://localhost:11434/api/generate"
 
-    analyzer = AsyncComponentAnalyzer(api_key=args.api_key, base_url=args.base_url, use_local=args.local, use_huawei=args.use_huawei, bearer_token=args.bearer_token)
+    analyzer = AsyncComponentAnalyzer(api_key=args.api_key, base_url=args.base_url, use_local=args.local, use_huawei=args.huawei, bearer_token=args.bearer_token)
     content = sys.stdin.read()
 
     blocks = analyzer.extract_target_interaction(content, args.target) if args.target else analyzer.extract_target_interaction(content, "")
