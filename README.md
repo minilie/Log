@@ -18,11 +18,11 @@ docker run -it --rm --network host -v $(pwd):/Log -v /home/minilie/ohos/OH5:/hom
 **windows：**
 
 ```bash
-# 拉取容器镜像
-docker pull minilie270/function-analyzer:latest
+# 加载容器镜像 镜像文件已经打包在仓库内
+docker load -i function-analyzer.tar
 
-# D:\Log为工具目录，这里主要是将克隆下来的工具目录挂载到/Log文件夹下，再将OpenHarmony源码挂载到相应的位置，例如OpenHarmony源码位于D:\OH5，那么就挂载到/D/OH5处，因为OpenHarmony编译时产生的编译数据库中记录的文件路径为源码所在路径，要想在容器内访问源码就必须保证挂载路径相同
-docker run -it --rm --network host -v "D:\Log:/Log" -v "D:\OH5:/D/OH5" minilie270/function-analyzer:latest
+# C:\Users\g00813359\Desktop\Log-main\Log-main为工具目录，这里主要是将克隆下来的工具目录挂载到/Log文件夹下，再将OpenHarmony源码挂载到相应的位置，例如OpenHarmony源码位于C:\Users\g00813359\Desktop\Log-main\Log-main\OH5，那么就挂载到C:\Users\g00813359\Desktop\Log-main\Log-main\OH5处，因为OpenHarmony编译时产生的编译数据库中记录的文件路径为源码所在路径，要想在容器内访问源码就必须保证挂载路径相同
+docker run -it --rm --network host -v "C:\Users\g00813359\Desktop\Log-main\Log-main:/Log" -v "C:\Users\g00813359\Desktop\Log-main\Log-main\OH5:/home/minilie/ohos/OH5" minilie270/function-analyzer:latest
 ```
 
 若不使用Docker
@@ -244,3 +244,16 @@ cat component_analysis_report.txt | python3 LLM_insert.py  --local --actual-inse
 
 
 通过以上步骤，系统会自动分析代码库中的组件交互，并在适当位置插入上下文相关的日志语句，提高代码的可调试性和可观测性。
+
+
+
+HUAWEI：
+
+```
+cat component_analysis_report.txt | python3 LLM_insert.py --huawei --target "js -> resource_management_lite"
+
+cat component_analysis_report.txt | python3 LLM_insert.py --huawei --target "ace_engine_lite -> init"
+
+cat component_analysis_report.txt | python3 LLM_insert.py --huawei --target "ace_engine_lite -> i18n_lite" --actual-insert
+```
+
