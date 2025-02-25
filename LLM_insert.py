@@ -386,12 +386,12 @@ async def main():
                         help='大模型 API 的 Base URL')
     parser.add_argument('--local', action='store_true',
                         help='使用本地大模型')
-    parser.add_argument('--use-huawei', action='store_true', help='使用华为 MLOps API')
+    parser.add_argument('--huawei', action='store_true', help='使用华为API')
     parser.add_argument('--bearer-token', help='Bearer token for Huawei API authentication')
     args = parser.parse_args()
 
     if not args.local and not args.use_huawei and not args.api_key:
-        parser.error("非本地模式或非华为模式时必须提供 api_key")
+        parser.error("非本地模式必须提供 api_key")
     if args.local and args.base_url == "https://api.deepseek.com":
         args.base_url = "http://localhost:11434/api/generate"
 
