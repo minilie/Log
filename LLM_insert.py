@@ -34,11 +34,19 @@ class CallInfo:
         return match.group(1).upper() if match else "UNKNOWN"
 
 class AsyncComponentAnalyzer:
-    def __init__(self, api_key: str, base_url: str = "https://api.deepseek.com", use_local: bool = False):
+    def __init__(self, api_key: str, base_url: str = "https://api.deepseek.com", use_local: bool = False, use_huawei: bool = False, bearer_token: str = None):
         self.use_local = use_local
+        self.use_huawei = use_huawei
         self.base_url = base_url
-        if not use_local:
+        self.bearer_token = bearer_token
+        if not use_local and not use_huawei:
             self.client = OpenAI(api_key=api_key, base_url=base_url)
+        elif use_huawei:
+            self.session = requests.Session()
+            self.huawei_url = "http://mlops.huawei.com/mlops-service/api/v1/agentService/v1/chat/completions"
+            self.headers = {
+                'Authorization': bearer_token or 'Bearer sk-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJsMzAwMjI4ODUiLCJhY2NvdW50TmFtZSI6ImxpeXUifQ.OknarADgrBgirjdqiz-7U-Yu_KIlRU7ca_6KZSk-0e0'
+            }
         else:
             self.client = None
         self.semaphore = asyncio.Semaphore(100)
@@ -197,11 +205,31 @@ Component: Caller=[{call_info.caller_component}], Callee=[{call_info.callee_comp
                 use_original=True
             )
 
-            if self.use_local:
+            if self.use_huawei:
+                try:
+                    json_data = {
+                        "model": "meta-llama-3-1-70b-instruct-20241203161536",
+                        "messages": [{"role": "user", "content": prompt}]
+                    }
+                    response = await asyncio.to_thread(
+                        self.session.post,
+                        self.huawei_url,
+                        headers=self.headers,
+                        json=json_data,
+                        verify=False
+                    )
+                    dict0 = json.loads(response.text)
+                    raw_response = dict0['choices'][0]['message']['content']
+                    answer0 = json.loads(raw_response)
+                    log_line = answer0 if isinstance(answer0, str) else f'HILOG_INFO("[{call_info.caller_component}] invokes {call_info.callee_component}")'
+                except Exception as e:
+                    logger.error(f"Error calling Huawei API: {e}")
+                    log_line = f'HILOG_ERROR("[{call_info.caller_component}] handles {call_info.callee_component}")'
+            elif self.use_local:
                 try:
                     response = await asyncio.to_thread(
                         lambda: requests.post(self.base_url, json={
-                            "model": "llama3.1:70b",
+                            "model": "deepseek-r1:32b-qwen-distill-fp16",
                             "prompt": prompt,
                             "stream": False,
                         })
@@ -358,14 +386,16 @@ async def main():
                         help='大模型 API 的 Base URL')
     parser.add_argument('--local', action='store_true',
                         help='使用本地大模型')
+    parser.add_argument('--use-huawei', action='store_true', help='使用华为 MLOps API')
+    parser.add_argument('--bearer-token', help='Bearer token for Huawei API authentication')
     args = parser.parse_args()
 
-    if not args.local and not args.api_key:
-        parser.error("非本地模式时必须提供 api_key")
+    if not args.local and not args.use_huawei and not args.api_key:
+        parser.error("非本地模式或非华为模式时必须提供 api_key")
     if args.local and args.base_url == "https://api.deepseek.com":
         args.base_url = "http://localhost:11434/api/generate"
 
-    analyzer = AsyncComponentAnalyzer(api_key=args.api_key, base_url=args.base_url, use_local=args.local)
+    analyzer = AsyncComponentAnalyzer(api_key=args.api_key, base_url=args.base_url, use_local=args.local, use_huawei=args.use_huawei, bearer_token=args.bearer_token)
     content = sys.stdin.read()
 
     blocks = analyzer.extract_target_interaction(content, args.target) if args.target else analyzer.extract_target_interaction(content, "")
