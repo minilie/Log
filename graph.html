@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Dependency Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+  <style>
+    /* 全局样式 */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8fafc;
+    }
+    .app-header {
+      background: linear-gradient(90deg, #6366f1, #4f46e5);
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .app-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .container {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+    .sidebar {
+      width: 320px;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+    .upload-area {
+      border: 2px dashed #6366f1;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #f0f4f8;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-top: 10px;
+    }
+    .component-list {
+      margin-top: 20px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    .component-item {
+      padding: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .component-item:hover {
+      background-color: #f0f4f8;
+      transform: scale(1.02);
+    }
+    .graph-container {
+      flex: 1;
+      padding: 20px;
+      background-color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    .mermaid {
+      width: 100%;
+      height: 100%;
+    }
+    #graphWrapper {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      transform-origin: center center;
+      position: absolute;
+    }
+    .notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background-color: #10b981;
+      padding: 10px 20px;
+      border-radius: 5px;
+      color: white;
+      display: none;
+      z-index: 1000;
+    }
+    .view-toggle {
+      margin-top: 20px;
+    }
+    .view-toggle button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #6366f1;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 5px;
+      transition: background-color 0.2s;
+    }
+    .view-toggle button.active {
+      background-color: #4f46e5;
+    }
+    .info-panel {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 320px;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease-in-out;
+      transform: translateX(100%);
+      z-index: 1000;
+    }
+    .info-panel.show {
+      transform: translateX(0);
+    }
+    .info-panel h3 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+      color: #333;
+    }
+    .info-panel .interaction {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    .info-panel .interaction:hover {
+      background-color: #f0f4f8;
+      cursor: pointer;
+    }
+    .info-panel .interaction code {
+      background-color: #eef2f7;
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+    .info-panel .close-btn {
+      display: block;
+      margin-top: 15px;
+      padding: 8px;
+      background-color: #6366f1;
+      color: white;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .info-panel .component-detail h4 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      color: #4f46e5;
+    }
+    .info-panel .component-detail p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Component Dependency Viewer</h1>
+  </header>
+  <div class="container">
+    <div class="sidebar">
+      <div class="upload-area" id="uploadArea">
+        <p>Drag and drop a file here or click to upload</p>
+        <input type="file" id="fileInput" style="display: none" accept=".txt">
+      </div>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search components...">
+      <div class="component-list" id="componentList"></div>
+      <div class="view-toggle">
+        <button id="singleViewBtn" class="active">Single Component View</button>
+        <button id="globalViewBtn">Global View</button>
+      </div>
+    </div>
+    <div class="graph-container">
+      <div id="graphWrapper"></div>
+    </div>
+  </div>
+  <div class="notification" id="notification"></div>
+  <div class="info-panel" id="infoPanel">
+    <h3>Component Details</h3>
+    <div id="infoPanelContent"></div>
+    <div class="close-btn" id="closeInfoPanelBtn">Close</div>
+  </div>
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
+
+    // 全局变量
+    let components = [];
+    let functionCallData = new Map();  // 针对原始调用数据格式
+    let reportEdges = [];              // 针对 Python 分析报告中提取的边
+    let componentDetails = {};         // 针对报告文件中的详细组件信息
+    let fileContent = '';
+    let isGlobalView = true;
+    let isReportFile = false;          // 是否为 Python 生成的报告文件
+
+    // 拖拽与缩放变量
+    let graphWrapper = document.getElementById('graphWrapper');
+    let isDragging = false;
+    let startX, startY;
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // 显示通知
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.style.display = 'block';
+      setTimeout(() => notification.style.display = 'none', 3000);
+    }
+
+    /* ---------------------- 以下为报告格式解析 ---------------------- */
+    // 从“1. Component Function Statistics:”提取组件列表
+    function parseReportComponents(content) {
+      const sectionRegex = /1\. Component Function Statistics:\s*([\s\S]*?)(?=\n\d+\.)/;
+      const match = content.match(sectionRegex);
+      const comps = new Set();
+      if (match) {
+        const sectionText = match[1];
+        const compRegex = /^\s*-\s*(\w+):/gm;
+        let compMatch;
+        while ((compMatch = compRegex.exec(sectionText)) !== null) {
+          comps.add(compMatch[1]);
+        }
+      }
+      return Array.from(comps);
+    }
+
+    // 从“1. Component Function Statistics:”提取详细组件信息
+    function parseReportComponentDetails(content) {
+      const details = {};
+      const regex = /-\s*(\w+):\s*\n\s*\*\s*Number of defined functions:\s*(\d+)\s*\n\s*\*\s*Number of external calls:\s*(\d+)/gm;
+      let match;
+      while ((match = regex.exec(content)) !== null) {
+        const comp = match[1];
+        const defined = match[2];
+        const external = match[3];
+        details[comp] = { defined, external };
+      }
+      return details;
+    }
+
+    // 从“2. Component Call Dependencies:”提取依赖边
+    function parseReportDependencies(content) {
+      const sectionRegex = /2\. Component Call Dependencies:\s*([\s\S]*?)(?=\n\d+\.)/;
+      const match = content.match(sectionRegex);
+      const edges = [];
+      if (match) {
+        const sectionText = match[1];
+        const edgeRegex = /^\s*([\w\d]+)\s*->\s*([\w\d]+):/gm;
+        let edgeMatch;
+        while ((edgeMatch = edgeRegex.exec(sectionText)) !== null) {
+          edges.push(edgeMatch[1] + "->" + edgeMatch[2]);
+        }
+      }
+      return edges;
+    }
+    /* ------------------------------------------------------------------ */
+
+    /* 修改 parseComponents：若为报告文件，则使用报告格式解析 */
+    function parseComponents(content) {
+      if (isReportFile) {
+        components = parseReportComponents(content);
+        componentDetails = parseReportComponentDetails(content);
+        updateComponentList();
+        return;
+      }
+      const componentsSet = new Set();
+      const statsPattern = /1\. Component Function Statistics:\s*([\s\S]*?)(?=2\.)/;
+      const statsMatch = content.match(statsPattern);
+      if (statsMatch) {
+        const statsSection = statsMatch[1];
+        const componentPattern = /-\s*(\w+):/g;
+        let match;
+        while ((match = componentPattern.exec(statsSection)) !== null) {
+          componentsSet.add(match[1]);
+        }
+      }
+      components = Array.from(componentsSet);
+      updateComponentList();
+    }
+
+    /* 更新组件列表，根据当前是否为报告文件分别展示 */
+    function updateComponentList() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const list = document.getElementById('componentList');
+      list.innerHTML = '';
+      let compsToShow = components.filter(comp => comp.toLowerCase().includes(searchTerm));
+      compsToShow.forEach(comp => {
+        const div = document.createElement('div');
+        div.className = 'component-item';
+        div.textContent = comp;
+        div.onclick = () => {
+          renderGraph(comp);
+          if (isReportFile) {
+            showComponentDetails(comp);
+          } else {
+            showComponentInteractions(comp);
+          }
+        };
+        list.appendChild(div);
+      });
+    }
+
+    /* 生成 Mermaid 图定义：根据是否为报告文件选择不同的数据源 */
+    function generateGraphDefinition(component = null) {
+      let graphDefinition = 'graph LR\n';
+      if (isReportFile) {
+        reportEdges.forEach(edgeStr => {
+          let parts = edgeStr.split("->");
+          if (parts.length === 2) {
+            let caller = parts[0];
+            let callee = parts[1];
+            if (!component || caller === component || callee === component) {
+              graphDefinition += `${caller} --> ${callee}\n`;
+            }
+          }
+        });
+      } else {
+        functionCallData.forEach((functions, key) => {
+          const [from, to] = key.split('->');
+          if (!component || from === component || to === component) {
+            graphDefinition += `${from} --> ${to}\n`;
+          }
+        });
+      }
+      return graphDefinition;
+    }
+
+    /* 渲染图形 */
+    function renderGraph(component) {
+      const graphWrapper = document.getElementById('graphWrapper');
+      const graphDefinition = generateGraphDefinition(component);
+      graphWrapper.innerHTML = `<div class="mermaid">${graphDefinition}</div>`;
+      mermaid.init(undefined, '.mermaid');
+      // 非报告文件时显示详细交互信息
+      if (component && !isReportFile) {
+        showComponentInteractions(component);
+      }
+    }
+
+    /* 显示组件详细信息（针对报告文件） */
+    function showComponentDetails(component) {
+      const panel = document.getElementById('infoPanel');
+      const panelContent = document.getElementById('infoPanelContent');
+      if (componentDetails && componentDetails[component]) {
+        const details = componentDetails[component];
+        panelContent.innerHTML = `
+          <div class="component-detail">
+            <h4>Component: ${component}</h4>
+            <p><strong>Defined Functions:</strong> ${details.defined}</p>
+            <p><strong>External Calls:</strong> ${details.external}</p>
+          </div>
+        `;
+      } else {
+        panelContent.innerHTML = `<div>No detailed information available for ${component}.</div>`;
+      }
+      panel.style.display = 'block';
+    }
+
+    /* 显示组件交互信息（针对非报告文件） */
+    function showComponentInteractions(component) {
+      const panel = document.getElementById('infoPanel');
+      const panelContent = document.getElementById('infoPanelContent');
+      let interactions = [];
+      functionCallData.forEach((functions, key) => {
+        const [from, to] = key.split('->');
+        if (from === component || to === component) {
+          interactions = [...interactions, { from, to, functions }];
+        }
+      });
+      if (interactions.length === 0) {
+        panelContent.innerHTML = `<div>No interactions found for this component.</div>`;
+      } else {
+        panelContent.innerHTML = interactions.map(interaction => 
+          `<div class="interaction">
+              <strong>Interaction: ${interaction.from} → ${interaction.to}</strong>
+              <div style="margin-left: 20px;">
+                ${interaction.functions.map(detail => 
+                  `<div>
+                    <strong>${detail.name}</strong> calls <strong>${detail.calledFunction}</strong>
+                    in <code>${detail.file}</code> at line <strong>${detail.line}</strong>
+                  </div>`
+                ).join('')}
+              </div>
+           </div>`
+        ).join('');
+      }
+      panel.style.display = 'block';
+    }
+
+    /* 关闭详细信息面板 */
+    document.getElementById('closeInfoPanelBtn').addEventListener('click', () => {
+      document.getElementById('infoPanel').style.display = 'none';
+    });
+
+    /* 原始数据格式的解析函数 —— 保留不动 */
+    function parseFunctionCalls(content) {
+      const functionCallData = new Map();
+      const pattern = /(\w+)\s*->\s*(\w+):\s*\*\s*(\S+)\s*calls\s*(\S+)\s*in\s*(.*)\s*at\s*line\s*(\d+)/g;
+      let match;
+      while ((match = pattern.exec(content)) !== null) {
+        const [, from, to, functionName, calledFunction, file, line] = match;
+        const functionInfo = {
+          name: functionName,
+          calledFunction: calledFunction,
+          file: file,
+          line: line
+        };
+        const key = `${from}->${to}`;
+        if (!functionCallData.has(key)) {
+          functionCallData.set(key, []);
+        }
+        functionCallData.get(key).push(functionInfo);
+      }
+      return functionCallData;
+    }
+
+    /* 文件上传处理 */
+    document.getElementById('fileInput').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file || !file.name.endsWith('.txt')) {
+        showNotification('Please upload a valid .txt file.');
+        return;
+      }
+      const text = await file.text();
+      fileContent = text;
+      // 判断是否为 Python 生成的报告文件
+      if (fileContent.startsWith("Component Analysis Report")) {
+        isReportFile = true;
+        components = parseReportComponents(fileContent);
+        reportEdges = parseReportDependencies(fileContent);
+        componentDetails = parseReportComponentDetails(fileContent);
+        updateComponentList();
+        showNotification('Report file uploaded successfully.');
+      } else {
+        isReportFile = false;
+        functionCallData = parseFunctionCalls(fileContent);
+        parseComponents(fileContent);
+        showNotification('File uploaded successfully.');
+      }
+      if (isGlobalView) {
+        renderGraph();
+      }
+    });
+
+    /* 点击上传区域触发文件选择 */
+    document.getElementById('uploadArea').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+
+    /* 搜索输入框实时更新组件列表 */
+    document.getElementById('searchInput').addEventListener('input', updateComponentList);
+
+    /* 视图切换按钮 */
+    document.getElementById('singleViewBtn').addEventListener('click', () => {
+      if (isReportFile === false && components.length === 0) {
+        showNotification("No component data available.");
+        return;
+      }
+      isGlobalView = false;
+      if (components.length > 0) {
+        renderGraph(components[0]);
+      } else {
+        renderGraph();
+      }
+      document.getElementById('singleViewBtn').classList.add('active');
+      document.getElementById('globalViewBtn').classList.remove('active');
+      if (!isReportFile) {
+        showComponentInteractions(components[0]);
+      } else {
+        showComponentDetails(components[0]);
+      }
+    });
+
+    document.getElementById('globalViewBtn').addEventListener('click', () => {
+      if (isReportFile === false && components.length === 0) {
+        showNotification("No component data available.");
+        return;
+      }
+      isGlobalView = true;
+      renderGraph();
+      document.getElementById('globalViewBtn').classList.add('active');
+      document.getElementById('singleViewBtn').classList.remove('active');
+      document.getElementById('infoPanel').style.display = 'none';
+    });
+
+    /* 拖拽功能 */
+    graphWrapper.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.pageX - offsetX;
+      startY = e.pageY - offsetY;
+      graphWrapper.style.cursor = 'grabbing';
+    });
+
+    graphWrapper.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      offsetX = e.pageX - startX;
+      offsetY = e.pageY - startY;
+      graphWrapper.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    });
+
+    graphWrapper.addEventListener('mouseup', () => {
+      isDragging = false;
+      graphWrapper.style.cursor = 'grab';
+    });
+
+    /* 缩放功能 */
+    graphWrapper.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+      scale *= zoomFactor;
+      graphWrapper.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    });
+  </script>
+</body>
+</html>
